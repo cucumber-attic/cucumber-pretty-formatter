@@ -1,4 +1,4 @@
-{"event": "StartedTestingFeature", "feature_source_id": "features/my.feature:1", "source": "Feature: My feature\n  In order to figure out which events we need to listen to\n  We should be able to pretty print semi-complex feature output\n\n  Scenario: First scenario\n    Given passing\n    And passing\n\n  Scenario: Second scenario\n    Given passing\n    And failing\n    And skipping"}
+{"event": "FeatureSourceParsed", "feature_source_id": "features/my.feature:1", "source": "Feature: My feature\n  In order to figure out which events we need to listen to\n  We should be able to pretty print semi-complex feature output\n\n  Scenario: First scenario\n    Given passing\n    And passing\n\n  Scenario: Second scenario\n    Given passing\n    And failing\n    And skipping"}
 {"event": "StartedTestingScenario", "scenario_source_id": "features/my.feature:5"}
 {"event": "StartedExecutingStep", "step_source_id": "features/my.feature:6"}
 {"event": "FoundStepDefinition", "step_source_id": "features/my.feature:6", "step_definition_id": "FeatureContext::passing()"}

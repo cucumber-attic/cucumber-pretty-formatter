@@ -66,7 +66,7 @@ func (r *reporter) event(s string) error {
 	}
 
 	switch typ {
-	case "StartedTestingFeature":
+	case "FeatureSourceParsed":
 		return json.Unmarshal([]byte(s), r)
 		// case "StartedTestingFeature":
 		// 	log.Println("started feat")
