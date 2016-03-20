@@ -1,0 +1,19 @@
+Feature: My feature
+  In order to figure out which events we need to listen to
+  We should be able to pretty print semi-complex feature output
+
+  Scenario: First scenario # features/my.feature:5
+    Given passing # FeatureContext::passing()
+    And passing # FeatureContext::passing()
+
+  Scenario: Second scenario # features/my.feature:9
+    Given passing # FeatureContext::passing()
+    And failing # FeatureContext::failing()
+      Something broke
+      some
+      explanation
+    And skipping # FeatureContext::skipping()
+
+2 scenarios (1 passed, 1 failed)
+5 steps (3 passed, 1 failed, 1 skipped)
+0m0.01s (6.73Mb)
