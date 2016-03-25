@@ -1,20 +1,33 @@
 package events
 
-import "github.com/cucumber/cucumber-pretty-formatter/events/location"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
-type id struct {
+type Identifier struct {
 	ID    string // feature identifier
 	Suite string // on which suite the feature runs in
 	Path  string // feature path
 	Line  int    // feature identification line
 }
 
-func (i *id) parseID() error {
-	loc, err := location.From(i.ID)
-	if err != nil {
-		return err
+func (i *Identifier) parseID() (err error) {
+	i.Path, i.Line, err = SplitID(i.ID)
+	return
+}
+
+func SplitID(s string) (string, int, error) {
+	delimIdx := strings.LastIndex(s, ":")
+	if delimIdx == -1 {
+		return "", 0, fmt.Errorf("could not parse location, line delimiter not found from: %s", s)
 	}
-	i.Path = loc.Path
-	i.Line = loc.Line
-	return nil
+
+	line, err := strconv.Atoi(s[delimIdx+1:])
+	if err != nil {
+		return "", 0, fmt.Errorf("could not parse line number from: \"%s\" as integer: %s", s, err)
+	}
+
+	return s[:delimIdx], line, nil
 }

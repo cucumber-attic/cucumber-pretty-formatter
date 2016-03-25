@@ -1,35 +1,35 @@
 package events
 
 type StepDefinitionFound struct {
-	id
+	Identifier
 	DefID string `json:"definition_id"`
 }
 
 type TestStepStarted struct {
-	id
+	Identifier
 }
 
 type TestStepPassed struct {
-	id
+	Identifier
 }
 
 type TestStepSkipped struct {
-	id
+	Identifier
 }
 
 type TestStepAmbiguous struct {
-	id
+	Identifier
 	// @TODO: define details
 }
 
 type TestStepUndefined struct {
-	id
+	Identifier
 	Todo    string `json:"todo"`
 	Snippet string `json:"snippet"`
 }
 
 type TestStepFailed struct {
-	id
+	Identifier
 	Error string `json:"error"`
 	Trace string `json:"trace"`
 }

@@ -1,13 +1,13 @@
 package events
 
 type TestCaseStarted struct {
-	id
+	Identifier
 }
 
 type TestCasePassed struct {
-	id
+	Identifier
 }
 
 type TestCaseFailed struct {
-	id
+	Identifier
 }

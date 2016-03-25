@@ -11,6 +11,8 @@ tool to get the actual **pretty, junit, html...** format output.
 There are many other ideas how this could extend, but their are not clear
 yet, like a common test suite for all implementations.
 
+Formatter error output should be **stderr**
+
 ## Status
 
 So far it is only a proof of concept and events have no clear

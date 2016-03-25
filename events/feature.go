@@ -12,7 +12,7 @@ type TestRunFinished struct {
 }
 
 type FeatureSourceRead struct {
-	id
+	Identifier
 	Source  string
 	Feature *gherkin.Feature
 }
