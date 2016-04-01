@@ -1,1 +1,0 @@
-{"event": "SourceRead", "feature_source_id": "features/my.feature:1", "source": "@hello\nFeature: My feature\n  Scenario: My scenario\n    Given not run"}

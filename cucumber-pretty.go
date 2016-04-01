@@ -97,7 +97,7 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		if err := json.Unmarshal([]byte(eventJSON), r.currentStep); err != nil {
 			return err
 		}
-	case "StartedExecutingStep":
+	case "TestStepStarted":
 		r.totalSteps++
 	case "StepHasPassed":
 		line := r.currentStep.SrcId[strings.Index(r.currentStep.SrcId, ":")+1:]
