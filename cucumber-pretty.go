@@ -43,7 +43,7 @@ func main() {
 	rep := &reporter{}
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		if err := rep.event(scanner.Text()); err != nil {
+		if err := rep.handleEvent(scanner.Text()); err != nil {
 			log.Fatalf("failed to process event: %s", err)
 		}
 	}
@@ -57,22 +57,22 @@ func (r *reporter) eventType(eventJSON string) (string, error) {
 	return typ.Event, json.Unmarshal([]byte(eventJSON), &typ)
 }
 
-func (r *reporter) event(s string) error {
-	typ, err := r.eventType(s)
+func (r *reporter) handleEvent(eventJSON string) error {
+	typ, err := r.eventType(eventJSON)
 	if err != nil {
 		return err
 	}
 
 	switch typ {
 	case "FeatureSourceParsed":
-		return json.Unmarshal([]byte(s), r)
+		return json.Unmarshal([]byte(eventJSON), r)
 		// case "StartedTestingFeature":
 		// 	log.Println("started feat")
 	case "StartedTestingScenario":
 		data := struct {
 			SourceId string `json:"scenario_source_id"`
 		}{}
-		err := json.Unmarshal([]byte(s), &data)
+		err := json.Unmarshal([]byte(eventJSON), &data)
 		if err != nil {
 			return err
 		}
@@ -94,7 +94,7 @@ func (r *reporter) event(s string) error {
 		r.totalScenariosFailed++
 	case "FoundStepDefinition":
 		r.currentStep = &step{}
-		if err := json.Unmarshal([]byte(s), r.currentStep); err != nil {
+		if err := json.Unmarshal([]byte(eventJSON), r.currentStep); err != nil {
 			return err
 		}
 	case "StartedExecutingStep":
@@ -121,7 +121,7 @@ func (r *reporter) event(s string) error {
 		r.totalStepsSkipped++
 	case "StepHasFailed":
 		failure := &failure{}
-		if err := json.Unmarshal([]byte(s), failure); err != nil {
+		if err := json.Unmarshal([]byte(eventJSON), failure); err != nil {
 			return err
 		}
 		line := r.currentStep.SrcId[strings.Index(r.currentStep.SrcId, ":")+1:]
@@ -140,7 +140,7 @@ func (r *reporter) event(s string) error {
 		r.totalStepsFailed++
 	case "TestingHasFinished":
 		stats := &stats{}
-		if err := json.Unmarshal([]byte(s), stats); err != nil {
+		if err := json.Unmarshal([]byte(eventJSON), stats); err != nil {
 			return err
 		}
 
