@@ -115,16 +115,18 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+r.currentStep.DefId)
 		r.cursor = printTo
 
-		if test_step_finished.Status == "passed" {
+		switch test_step_finished.Status {
+		case "passed":
 			r.totalStepsPassed++
-		} else if test_step_finished.Status == "failed" {
+		case "skipped":
+			r.totalStepsSkipped++
+		case "failed":
+			r.totalStepsFailed++
+
 			fmt.Fprintln(os.Stdout, "      "+test_step_finished.Summary)
 			for _, detailsLine := range strings.Split(test_step_finished.Details, "\n") {
 				fmt.Fprintln(os.Stdout, "      "+detailsLine)
 			}
-			r.totalStepsFailed++
-		} else {
-			r.totalStepsSkipped++
 		}
 	case "TestingHasFinished":
 		stats := &stats{}
