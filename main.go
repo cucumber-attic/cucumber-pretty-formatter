@@ -26,7 +26,7 @@ type stats struct {
 }
 
 type reporter struct {
-	Feature     string `json:"source"`
+	Source     string `json:"source"`
 	cursor      int
 	currentStep *step
 
@@ -50,8 +50,6 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Fatalf("failed to read stdin: %s", err)
 	}
-
-	// fmt.Fprintln(os.Stdout, rep.Feature)
 }
 
 func (r *reporter) eventType(s string) (string, error) {
@@ -84,7 +82,7 @@ func (r *reporter) event(s string) error {
 			return err
 		}
 
-		printLines := strings.Split(r.Feature, "\n")[r.cursor:printTo]
+		printLines := strings.Split(r.Source, "\n")[r.cursor:printTo]
 
 		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+data.SourceId)
 		r.cursor = printTo
@@ -107,7 +105,7 @@ func (r *reporter) event(s string) error {
 		if err != nil {
 			return err
 		}
-		printLines := strings.Split(r.Feature, "\n")[r.cursor:printTo]
+		printLines := strings.Split(r.Source, "\n")[r.cursor:printTo]
 		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+r.currentStep.DefId)
 		r.cursor = printTo
 		r.totalStepsPassed++
@@ -117,7 +115,7 @@ func (r *reporter) event(s string) error {
 		if err != nil {
 			return err
 		}
-		printLines := strings.Split(r.Feature, "\n")[r.cursor:printTo]
+		printLines := strings.Split(r.Source, "\n")[r.cursor:printTo]
 		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+r.currentStep.DefId)
 		r.cursor = printTo
 		r.totalStepsSkipped++
@@ -131,7 +129,7 @@ func (r *reporter) event(s string) error {
 		if err != nil {
 			return err
 		}
-		printLines := strings.Split(r.Feature, "\n")[r.cursor:printTo]
+		printLines := strings.Split(r.Source, "\n")[r.cursor:printTo]
 		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+r.currentStep.DefId)
 		r.cursor = printTo
 
