@@ -1,21 +1,21 @@
 {"event": "SourceRead", "feature_source_id": "features/my.feature:1", "source": "Feature: My feature\n  In order to figure out which events we need to listen to\n  We should be able to pretty print semi-complex feature output\n\n  Scenario: First scenario\n    Given passing\n    And passing\n\n  Scenario: Second scenario\n    Given passing\n    And failing\n    And skipping"}
 {"event": "TestCaseStarted", "scenario_source_id": "features/my.feature:5"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:6"}
-{"event": "FoundStepDefinition", "step_source_id": "features/my.feature:6", "step_definition_id": "FeatureContext::passing()"}
+{"event": "TestStepMatched", "step_source_id": "features/my.feature:6", "step_definition_id": "FeatureContext::passing()"}
 {"event": "TestStepFinished", "step_source_id": "features/my.feature:6", "status": "passed"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:7"}
-{"event": "FoundStepDefinition", "step_source_id": "features/my.feature:7", "step_definition_id": "FeatureContext::passing()"}
+{"event": "TestStepMatched", "step_source_id": "features/my.feature:7", "step_definition_id": "FeatureContext::passing()"}
 {"event": "TestStepFinished", "step_source_id": "features/my.feature:7", "status": "passed"}
 {"event": "ScenarioHasPassed", "scenario_source_id": "features/my.feature:7"}
 {"event": "TestCaseStarted", "scenario_source_id": "features/my.feature:9"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:10"}
-{"event": "FoundStepDefinition", "step_source_id": "features/my.feature:10", "step_definition_id": "FeatureContext::passing()"}
+{"event": "TestStepMatched", "step_source_id": "features/my.feature:10", "step_definition_id": "FeatureContext::passing()"}
 {"event": "TestStepFinished", "step_source_id": "features/my.feature:10", "status": "passed"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:11"}
-{"event": "FoundStepDefinition", "step_source_id": "features/my.feature:11", "step_definition_id": "FeatureContext::failing()"}
+{"event": "TestStepMatched", "step_source_id": "features/my.feature:11", "step_definition_id": "FeatureContext::failing()"}
 {"event": "TestStepFinished", "step_source_id": "features/my.feature:11", "status": "failed", "error_summary": "Something broke", "error_details": "some\nexplanation"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:12"}
-{"event": "FoundStepDefinition", "step_source_id": "features/my.feature:12", "step_definition_id": "FeatureContext::skipping()"}
+{"event": "TestStepMatched", "step_source_id": "features/my.feature:12", "step_definition_id": "FeatureContext::skipping()"}
 {"event": "TestStepFinished", "step_source_id": "features/my.feature:12", "status": "skipped"}
 {"event": "ScenarioHasFailed", "scenario_source_id": "features/my.feature:5"}
 {"event": "FinishedTestingFeature", "feature_source_id": "features/my.feature:1"}

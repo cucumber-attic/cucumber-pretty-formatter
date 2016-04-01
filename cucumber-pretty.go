@@ -93,7 +93,7 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		r.totalScenariosPassed++
 	case "ScenarioHasFailed":
 		r.totalScenariosFailed++
-	case "FoundStepDefinition":
+	case "TestStepMatched":
 		r.currentStep = &step{}
 		if err := json.Unmarshal([]byte(eventJSON), r.currentStep); err != nil {
 			return err
