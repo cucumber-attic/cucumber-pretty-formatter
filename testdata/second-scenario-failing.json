@@ -2,18 +2,18 @@
 {"event": "TestCaseStarted", "scenario_source_id": "features/my.feature:5"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:6"}
 {"event": "FoundStepDefinition", "step_source_id": "features/my.feature:6", "step_definition_id": "FeatureContext::passing()"}
-{"event": "StepHasPassed", "step_source_id": "features/my.feature:6"}
+{"event": "TestStepFinished", "step_source_id": "features/my.feature:6", "status": "passed"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:7"}
 {"event": "FoundStepDefinition", "step_source_id": "features/my.feature:7", "step_definition_id": "FeatureContext::passing()"}
-{"event": "StepHasPassed", "step_source_id": "features/my.feature:7"}
+{"event": "TestStepFinished", "step_source_id": "features/my.feature:7", "status": "passed"}
 {"event": "ScenarioHasPassed", "scenario_source_id": "features/my.feature:7"}
 {"event": "TestCaseStarted", "scenario_source_id": "features/my.feature:9"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:10"}
 {"event": "FoundStepDefinition", "step_source_id": "features/my.feature:10", "step_definition_id": "FeatureContext::passing()"}
-{"event": "StepHasPassed", "step_source_id": "features/my.feature:10"}
+{"event": "TestStepFinished", "step_source_id": "features/my.feature:10", "status": "passed"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:11"}
 {"event": "FoundStepDefinition", "step_source_id": "features/my.feature:11", "step_definition_id": "FeatureContext::failing()"}
-{"event": "StepHasFailed", "step_source_id": "features/my.feature:11", "error_summary": "Something broke", "error_details": "some\nexplanation"}
+{"event": "TestStepFinished", "step_source_id": "features/my.feature:11", "status": "failed", "error_summary": "Something broke", "error_details": "some\nexplanation"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:12"}
 {"event": "FoundStepDefinition", "step_source_id": "features/my.feature:12", "step_definition_id": "FeatureContext::skipping()"}
 {"event": "SkippedStep", "step_source_id": "features/my.feature:12"}

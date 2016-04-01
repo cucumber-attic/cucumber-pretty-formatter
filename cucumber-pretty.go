@@ -15,7 +15,8 @@ type step struct {
 	SrcId string `json:"step_source_id"`
 }
 
-type failure struct {
+type test_step_finished struct {
+	Status string `json:"status"`
 	Summary string `json:"error_summary"`
 	Details string `json:"error_details"`
 }
@@ -99,7 +100,12 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		}
 	case "TestStepStarted":
 		r.totalSteps++
-	case "StepHasPassed":
+	case "TestStepFinished":
+		test_step_finished := &test_step_finished{}
+		if err := json.Unmarshal([]byte(eventJSON), test_step_finished); err != nil {
+			return err
+		}
+
 		line := r.currentStep.SrcId[strings.Index(r.currentStep.SrcId, ":")+1:]
 		printTo, err := strconv.Atoi(line)
 		if err != nil {
@@ -108,7 +114,16 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		printLines := strings.Split(r.Source, "\n")[r.cursor:printTo]
 		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+r.currentStep.DefId)
 		r.cursor = printTo
-		r.totalStepsPassed++
+
+		if test_step_finished.Status == "passed" {
+			r.totalStepsPassed++
+		} else {
+			fmt.Fprintln(os.Stdout, "      "+test_step_finished.Summary)
+			for _, detailsLine := range strings.Split(test_step_finished.Details, "\n") {
+				fmt.Fprintln(os.Stdout, "      "+detailsLine)
+			}
+			r.totalStepsFailed++
+		}
 	case "SkippedStep":
 		line := r.currentStep.SrcId[strings.Index(r.currentStep.SrcId, ":")+1:]
 		printTo, err := strconv.Atoi(line)
@@ -119,25 +134,6 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+r.currentStep.DefId)
 		r.cursor = printTo
 		r.totalStepsSkipped++
-	case "StepHasFailed":
-		failure := &failure{}
-		if err := json.Unmarshal([]byte(eventJSON), failure); err != nil {
-			return err
-		}
-		line := r.currentStep.SrcId[strings.Index(r.currentStep.SrcId, ":")+1:]
-		printTo, err := strconv.Atoi(line)
-		if err != nil {
-			return err
-		}
-		printLines := strings.Split(r.Source, "\n")[r.cursor:printTo]
-		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+r.currentStep.DefId)
-		r.cursor = printTo
-
-		fmt.Fprintln(os.Stdout, "      "+failure.Summary)
-		for _, detailsLine := range strings.Split(failure.Details, "\n") {
-			fmt.Fprintln(os.Stdout, "      "+detailsLine)
-		}
-		r.totalStepsFailed++
 	case "TestingHasFinished":
 		stats := &stats{}
 		if err := json.Unmarshal([]byte(eventJSON), stats); err != nil {
