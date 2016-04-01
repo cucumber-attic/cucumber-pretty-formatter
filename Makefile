@@ -1,8 +1,15 @@
-test: actual.txt
-	diff -u expected.txt actual.txt
+EVENT_FILES = $(shell find ./testdata -name "*.json")
+GENERATED_OUTPUT_FILES = $(patsubst ./testdata/%.json,output/%.out,$(EVENT_FILES))
 
-actual.txt: streamer inp.json
-	cat inp.json | ./streamer > actual.txt
+all: $(GENERATED_OUTPUT_FILES)
+
+output/%.out: ./testdata/%.json ./testdata/%.json.expected streamer
+	cat $< | ./streamer > $@
+	diff --unified $<.expected $@
+.DELETE_ON_ERROR: output/%.out
 
 streamer: main.go
 	go build -o streamer
+
+clean:
+	rm -rf output/*
