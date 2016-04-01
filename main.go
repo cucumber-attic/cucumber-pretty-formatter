@@ -52,9 +52,9 @@ func main() {
 	}
 }
 
-func (r *reporter) eventType(s string) (string, error) {
+func (r *reporter) eventType(eventJSON string) (string, error) {
 	typ := struct{ Event string }{}
-	return typ.Event, json.Unmarshal([]byte(s), &typ)
+	return typ.Event, json.Unmarshal([]byte(eventJSON), &typ)
 }
 
 func (r *reporter) event(s string) error {
