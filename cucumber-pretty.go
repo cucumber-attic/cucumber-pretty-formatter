@@ -68,7 +68,7 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		return json.Unmarshal([]byte(eventJSON), r)
 		// case "StartedTestingFeature":
 		// 	log.Println("started feat")
-	case "StartedTestingScenario":
+	case "TestCaseStarted":
 		data := struct {
 			SourceId string `json:"scenario_source_id"`
 		}{}
