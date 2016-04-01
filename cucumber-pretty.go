@@ -12,7 +12,7 @@ import (
 
 type step struct {
 	DefId string `json:"step_definition_id"`
-	SrcId string `json:"step_source_id"`
+	SrcId string `json:"location"`
 }
 
 type test_step_finished struct {
@@ -70,7 +70,7 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		// 	log.Println("started feat")
 	case "TestCaseStarted":
 		data := struct {
-			SourceId string `json:"scenario_source_id"`
+			SourceId string `json:"location"`
 		}{}
 		err := json.Unmarshal([]byte(eventJSON), &data)
 		if err != nil {
