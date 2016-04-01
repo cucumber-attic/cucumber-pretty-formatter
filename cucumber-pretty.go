@@ -35,13 +35,13 @@ type reporter struct {
 	totalSteps           int
 	totalScenariosPassed int
 	totalScenariosFailed int
-	totalStepsPassed     int
-	totalStepsFailed     int
-	totalStepsSkipped    int
+	stepStatuses         map[string]int
 }
 
 func main() {
 	rep := &reporter{}
+	rep.stepStatuses = make(map[string]int)
+
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		if err := rep.handleEvent(scanner.Text()); err != nil {
@@ -115,14 +115,9 @@ func (r *reporter) handleEvent(eventJSON string) error {
 		fmt.Fprintln(os.Stdout, strings.Join(printLines, "\n")+" # "+r.currentStep.DefId)
 		r.cursor = printTo
 
-		switch test_step_finished.Status {
-		case "passed":
-			r.totalStepsPassed++
-		case "skipped":
-			r.totalStepsSkipped++
-		case "failed":
-			r.totalStepsFailed++
+		r.stepStatuses[test_step_finished.Status]++
 
+		if test_step_finished.Status == "failed" {
 			fmt.Fprintln(os.Stdout, "      "+test_step_finished.Summary)
 			for _, detailsLine := range strings.Split(test_step_finished.Details, "\n") {
 				fmt.Fprintln(os.Stdout, "      "+detailsLine)
@@ -136,7 +131,7 @@ func (r *reporter) handleEvent(eventJSON string) error {
 
 		fmt.Fprintln(os.Stdout)
 		fmt.Fprintln(os.Stdout, fmt.Sprintf("%d scenarios (%d passed, %d failed)", r.totalScenarios, r.totalScenariosPassed, r.totalScenariosFailed))
-		fmt.Fprintln(os.Stdout, fmt.Sprintf("%d steps (%d passed, %d failed, %d skipped)", r.totalSteps, r.totalStepsPassed, r.totalStepsFailed, r.totalStepsSkipped))
+		fmt.Fprintln(os.Stdout, fmt.Sprintf("%d steps (%d passed, %d failed, %d skipped)", r.totalSteps, r.stepStatuses["passed"], r.stepStatuses["failed"], r.stepStatuses["skipped"]))
 
 		fmt.Fprintln(os.Stdout, fmt.Sprintf("%s (%s)", stats.Time, stats.Memory))
 	}
