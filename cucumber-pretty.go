@@ -32,7 +32,6 @@ type reporter struct {
 	currentStep *step
 
 	totalScenarios       int
-	totalSteps           int
 	totalScenariosPassed int
 	totalScenariosFailed int
 	stepStatuses         map[string]int
@@ -99,7 +98,7 @@ func (r *reporter) handleEvent(eventJSON string) error {
 			return err
 		}
 	case "TestStepStarted":
-		r.totalSteps++
+		// no-op
 	case "TestStepFinished":
 		test_step_finished := &test_step_finished{}
 		if err := json.Unmarshal([]byte(eventJSON), test_step_finished); err != nil {
@@ -129,9 +128,14 @@ func (r *reporter) handleEvent(eventJSON string) error {
 			return err
 		}
 
+		totalStepCount := 0
+		for _, count := range r.stepStatuses {
+			totalStepCount += count
+    }
+
 		fmt.Fprintln(os.Stdout)
 		fmt.Fprintln(os.Stdout, fmt.Sprintf("%d scenarios (%d passed, %d failed)", r.totalScenarios, r.totalScenariosPassed, r.totalScenariosFailed))
-		fmt.Fprintln(os.Stdout, fmt.Sprintf("%d steps (%d passed, %d failed, %d skipped)", r.totalSteps, r.stepStatuses["passed"], r.stepStatuses["failed"], r.stepStatuses["skipped"]))
+		fmt.Fprintln(os.Stdout, fmt.Sprintf("%d steps (%d passed, %d failed, %d skipped)", totalStepCount, r.stepStatuses["passed"], r.stepStatuses["failed"], r.stepStatuses["skipped"]))
 
 		fmt.Fprintln(os.Stdout, fmt.Sprintf("%s (%s)", stats.Time, stats.Memory))
 	}
