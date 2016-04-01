@@ -3,13 +3,13 @@ GENERATED_OUTPUT_FILES = $(patsubst ./testdata/%.json,output/%.out,$(EVENT_FILES
 
 all: $(GENERATED_OUTPUT_FILES)
 
-output/%.out: ./testdata/%.json ./testdata/%.json.expected streamer
-	cat $< | ./streamer > $@
+output/%.out: ./testdata/%.json ./testdata/%.json.expected cucumber-pretty
+	cat $< | ./cucumber-pretty > $@
 	diff --unified $<.expected $@
 .DELETE_ON_ERROR: output/%.out
 
-streamer: main.go
-	go build -o streamer
+cucumber-pretty: cucumber-pretty.go
+	go build -o $@
 
 clean:
-	rm -rf output/*
+	rm -rf cucumber-pretty output/*
