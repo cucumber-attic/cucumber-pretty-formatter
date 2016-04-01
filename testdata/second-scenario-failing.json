@@ -16,7 +16,7 @@
 {"event": "TestStepFinished", "step_source_id": "features/my.feature:11", "status": "failed", "error_summary": "Something broke", "error_details": "some\nexplanation"}
 {"event": "TestStepStarted", "step_source_id": "features/my.feature:12"}
 {"event": "FoundStepDefinition", "step_source_id": "features/my.feature:12", "step_definition_id": "FeatureContext::skipping()"}
-{"event": "SkippedStep", "step_source_id": "features/my.feature:12"}
+{"event": "TestStepFinished", "step_source_id": "features/my.feature:12", "status": "skipped"}
 {"event": "ScenarioHasFailed", "scenario_source_id": "features/my.feature:5"}
 {"event": "FinishedTestingFeature", "feature_source_id": "features/my.feature:1"}
 {"event": "TestingHasFinished", "time": "0m0.01s", "memory": "6.73Mb"}
