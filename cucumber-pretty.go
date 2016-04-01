@@ -27,7 +27,7 @@ type stats struct {
 }
 
 type reporter struct {
-	Source     string `json:"source"`
+	Source      string `json:"source"`
 	cursor      int
 	currentStep *step
 
