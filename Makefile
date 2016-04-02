@@ -4,6 +4,7 @@ GENERATED_OUTPUT_FILES = $(patsubst ./testdata/%.json,output/%.out,$(EVENT_FILES
 all: $(GENERATED_OUTPUT_FILES)
 
 output/%.out: ./testdata/%.json ./testdata/%.json.expected cucumber-pretty
+	mkdir -p $$(dirname $@)
 	cat $< | ./cucumber-pretty > $@
 	diff --unified $<.expected $@
 .DELETE_ON_ERROR: output/%.out
@@ -12,4 +13,4 @@ cucumber-pretty: cucumber-pretty.go
 	go build -o $@
 
 clean:
-	rm -rf cucumber-pretty output/*
+	rm -rf cucumber-pretty output
