@@ -2,11 +2,11 @@ Feature: My feature
   In order to figure out which events we need to listen to
   We should be able to pretty print semi-complex feature output
 
-  Scenario: First scenario # features/my.feature:5
+  Scenario: First scenario # testdata/second-scenario-failing.feature:5
     Given passing # FeatureContext::passing()
     And passing # FeatureContext::passing()
 
-  Scenario: Second scenario # features/my.feature:9
+  Scenario: Second scenario # testdata/second-scenario-failing.feature:9
     Given passing # FeatureContext::passing()
     And failing # FeatureContext::failing()
       Something broke
