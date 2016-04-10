@@ -15,6 +15,9 @@ func (p *pretty) Event(e events.Event) error {
 		ft := p.feature(t.Identifier)
 		ft.ast = t.Feature
 		ft.background = ft.ast.Background
+		if err := ft.print.header(ft.ast); err != nil {
+			return err
+		}
 	case *events.StepDefinitionFound:
 		ft := p.feature(t.Identifier)
 		st, err := ft.step(t.Identifier)

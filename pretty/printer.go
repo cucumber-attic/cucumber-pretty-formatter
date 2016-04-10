@@ -1,6 +1,7 @@
 package pretty
 
 import (
+	"fmt"
 	"io"
 	"strings"
 
@@ -45,38 +46,28 @@ func (p *printer) header(ft *gherkin.Feature) error {
 	return nil
 }
 
-func (p *printer) background(bg *gherkin.Background) error {
-	ln := s(2) + bold(white(bg.Keyword+":")) + " " + bg.Name
+func (p *printer) container(st *step) error {
+	max := st.maxLen()
+	var headline string
+	loc := st.container.(*gherkin.Node).Location
+	switch t := st.container.(type) {
+	case *gherkin.Background:
+		headline = bold(white(t.Keyword+":")) + " " + t.Name
+	case *gherkin.Scenario:
+		headline = bold(white(t.Keyword+":")) + " " + t.Name
+	case *gherkin.ScenarioOutline:
+		headline = bold(white(t.Keyword+":")) + " " + t.Name
+	}
+
+	ln := s(loc.Column) + headline
+	gap := max - len(headline)
+	ln += s(gap) + black(" # "+fmt.Sprintf("%s:%d", st.id.Path, loc.Line))
 	_, err := io.WriteString(p.output, "\n"+ln+"\n")
 	return err
 }
 
-func (p *printer) backgroundStep(st *step, bg *gherkin.Background) error {
-	pos := len(bg.Keyword) + 1
-	if len(bg.Name) > 0 {
-		pos += len(bg.Name) + 1
-	}
-
-	var last bool
-	for n, bgStep := range bg.Steps {
-		last = n == len(bg.Steps)-1
-		cand := len(bgStep.Keyword+bgStep.Text) + 1
-		if pos < cand {
-			pos = cand
-		}
-	}
-
-	if err := p.step(st, pos); err != nil {
-		return err
-	}
-
-	if last {
-
-	}
-	return nil
-}
-
-func (p *printer) step(st *step, max int) error {
+func (p *printer) step(st *step) error {
+	max := st.maxLen()
 	// determine color
 	var clr func(interface{}) string
 	switch st.state {
