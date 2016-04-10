@@ -43,7 +43,7 @@ func (ft *feature) flush(s *step) error {
 }
 
 func (ft *feature) step(id events.Identifier) (*step, error) {
-	if s, available := ft.steps[id.ID]; available {
+	if s, available := ft.steps[id.Location]; available {
 		return s, nil
 	}
 
@@ -52,12 +52,12 @@ func (ft *feature) step(id events.Identifier) (*step, error) {
 		return nil, fmt.Errorf("step was not found in gherkin AST at line: \"%d\" as expected", id.Line)
 	}
 
-	ft.steps[id.ID] = &step{
+	ft.steps[id.Location] = &step{
 		id:        id,
 		step:      gs,
 		container: gn,
 	}
-	return ft.steps[id.ID], nil
+	return ft.steps[id.Location], nil
 }
 
 // findStep finds step in gherkin AST

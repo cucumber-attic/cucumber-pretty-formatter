@@ -7,8 +7,8 @@
 require 'json'
 feature_file = ARGV[0]
 puts({
-  event: "SourceRead",
-  feature_source_id: feature_file,
+  event: "FeatureSourceRead",
+  location: feature_file,
   source: File.open(feature_file, 'r:utf-8').read
 }.to_json)
 puts File.open(feature_file.gsub(/\.feature/, '.json'), 'r:utf-8').read

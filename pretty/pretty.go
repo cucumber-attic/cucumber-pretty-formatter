@@ -30,7 +30,7 @@ func (p *pretty) hasFeature(id events.Identifier) bool {
 		return false
 	}
 
-	_, hasFeature := st.features[id.ID]
+	_, hasFeature := st.features[id.Location]
 	if !hasFeature {
 		return false
 	}
@@ -46,13 +46,13 @@ func (p *pretty) feature(id events.Identifier) *feature {
 		st = p.suites[id.Suite]
 	}
 
-	ft, hasFeature := st.features[id.ID]
+	ft, hasFeature := st.features[id.Location]
 	if !hasFeature {
-		st.features[id.ID] = &feature{
+		st.features[id.Location] = &feature{
 			steps: make(map[string]*step),
 			print: &printer{output: p.output},
 		}
-		ft = st.features[id.ID]
+		ft = st.features[id.Location]
 	}
 	return ft
 }

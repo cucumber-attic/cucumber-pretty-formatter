@@ -10,7 +10,7 @@ func (p *pretty) Event(e events.Event) error {
 	switch t := e.(type) {
 	case *events.FeatureSourceRead:
 		if p.hasFeature(t.Identifier) {
-			return fmt.Errorf(`unexpected feature reread event, feature: "%s", was already read for suite: "%s"`, t.ID, t.Suite)
+			return fmt.Errorf(`unexpected feature reread event, feature: "%s", was already read for suite: "%s"`, t.Location, t.Suite)
 		}
 		ft := p.feature(t.Identifier)
 		ft.ast = t.Feature

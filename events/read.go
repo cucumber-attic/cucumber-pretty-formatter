@@ -31,70 +31,70 @@ func Read(data []byte) (Event, error) {
 		if err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	// START test case (scenario, outline example)
 	case "TestCaseStarted":
 		event := &TestCaseStarted{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	// START step
 	case "StepDefinitionFound":
 		event := &StepDefinitionFound{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	case "TestStepStarted":
 		event := &TestStepStarted{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	case "TestStepPassed":
 		event := &TestStepPassed{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	case "TestStepFailed":
 		event := &TestStepFailed{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	case "TestStepSkipped":
 		event := &TestStepSkipped{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	case "TestStepUndefined":
 		event := &TestStepUndefined{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	case "TestStepAmbiguous":
 		event := &TestStepAmbiguous{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	// END step
 	case "TestCasePassed":
 		event := &TestCasePassed{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	case "TestCaseFailed":
 		event := &TestCaseFailed{}
 		if err = json.Unmarshal(data, event); err != nil {
 			return nil, err
 		}
-		return event, event.parseID()
+		return event, event.parseLocation()
 	// END test case
 	case "TestRunFinished":
 		event := &TestRunFinished{}

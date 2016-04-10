@@ -7,18 +7,18 @@ import (
 )
 
 type Identifier struct {
-	ID    string // feature identifier
-	Suite string // on which suite the feature runs in
-	Path  string // feature path
-	Line  int    // feature identification line
+	Location string // feature identifier
+	Suite    string // on which suite the feature runs in
+	Path     string // feature path
+	Line     int    // feature identification line
 }
 
-func (i *Identifier) parseID() (err error) {
-	i.Path, i.Line, err = SplitID(i.ID)
+func (i *Identifier) parseLocation() (err error) {
+	i.Path, i.Line, err = Location(i.Location)
 	return
 }
 
-func SplitID(s string) (string, int, error) {
+func Location(s string) (string, int, error) {
 	delimIdx := strings.LastIndex(s, ":")
 	if delimIdx == -1 {
 		return "", 0, fmt.Errorf("could not parse location, line delimiter not found from: %s", s)

@@ -1,7 +1,2 @@
-<<<<<<< 9ec512631945db297a6c4c6bb470be3685ca757a
 cucumber-pretty
 output/
-=======
-/cufmt
-/actual.txt
->>>>>>> start to reorganize code for pretty formatter first

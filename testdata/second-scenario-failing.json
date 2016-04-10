@@ -17,5 +17,5 @@
 {"event": "TestStepMatched", "location": "testdata/second-scenario-failing.feature:12", "step_definition_id": "FeatureContext::skipping()"}
 {"event": "TestStepFinished", "location": "testdata/second-scenario-failing.feature:12", "status": "skipped"}
 {"event": "ScenarioHasFailed", "location": "testdata/second-scenario-failing.feature:5"}
-{"event": "FinishedTestingFeature", "feature_source_id": "testdata/second-scenario-failing.feature:1"}
+{"event": "FinishedTestingFeature", "location": "testdata/second-scenario-failing.feature:1"}
 {"event": "TestingHasFinished", "time": "0m0.01s", "memory": "6.73Mb"}
