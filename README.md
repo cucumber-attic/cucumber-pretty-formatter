@@ -25,7 +25,7 @@ General purpose formatter, expects these events passed in as a stream of
 **json** objects.
 
 1. [TestRunStarted](#testrunstarted)
-2. [GherkinSourceRead](#gherkinsourceread)
+2. [TestSource](#testsource)
 3. [StepDefinitionFound](#stepdefinitionfound)
 4. [TestCaseStarted](#testcasestarted)
 5. [TestStepStarted](#teststepstarted)
@@ -46,27 +46,26 @@ Triggers when tests are started. Specifies protocol version.
 ```
 
 1. **event** - name of event.
-2. **version** - protocol version used for events.
+2. **version** - `optional` protocol version used for events. If not
+   provided, latest stable protocol version is expected.
 
-### GherkinSourceRead
+### TestSource
 
-Currently only **gherkin** source is supported and after a feature file is
-parsed it should send this event with it's plain source.
+When a test source is parsed, this event should be sent with plain text of
+source. Currently only **gherkin** source is supported and it will be
+determined by source extension found in **location**.
 
 ``` json
 {
-    "event": "GherkinSourceRead",
-    "id": "features/simple.feature:1",
-    "suite": "main",
+    "event": "TestSource",
+    "location": "features/simple.feature:1",
     "source": "Feature:\n  Scenario: passing\n    Given passes"
 }
 ```
 
 1. **event** - name of event.
-2. **id** - location in feature file, based on pattern {path}:{line}.
-3. **suite** - may not be provided. Otherwise it may be used as a name for
-   filter groups.
-4. **source** - is plain feature file source.
+2. **location** - location in source file, based on pattern {path}:{line}.
+3. **source** - is plain text of test source.
 
 ### StepDefinitionFound
 
@@ -77,24 +76,23 @@ implementation in the source code. Note: there may be ambiguous matches.
 ``` json
 {
     "event": "StepDefinitionFound",
-    "id": "features/simple.feature:5",
-    "suite": "main",
+    "location": "features/simple.feature:5",
     "definition_id": "FeatureContext::passing():6",
     "arguments": [
         [12, 18],
         [23, 26]
-    ]
+    ],
+    "suite": "main"
 }
 ```
 
 1. **event** - name of event.
-2. **id** - location in feature file, based on pattern {path}:{line}.
-3. **suite** - may not be provided. Otherwise it may be used as a name for
-   filter groups.
-4. **definition_id** - reference to step definition in source code.
-5. **arguments** - list of positions for arguments which were matched.
+2. **location** - location in source file, based on pattern {path}:{line}.
+3. **definition_id** - reference to step definition in source code.
+4. **arguments** - list of positions for arguments which were matched.
    Positions are determined on **step text** step keyword should be
    omitted when calculating argument positions.
+5. **suite** - `optional` may be used to distinguish test groups.
 
 ### TestCaseStarted
 
@@ -103,15 +101,14 @@ Should fire when starting to execute scenario or scenario outline example.
 ``` json
 {
     "event": "TestCaseStarted",
-    "id": "features/simple.feature:4",
+    "location": "features/simple.feature:4",
     "suite": "main"
 }
 ```
 
 1. **event** - name of event.
-2. **id** - location in feature file, based on pattern {path}:{line}.
-3. **suite** - may not be provided. Otherwise it may be used as a name for
-   filter groups.
+2. **location** - location in source file, based on pattern {path}:{line}.
+3. **suite** - `optional` may be used to distinguish test groups.
 
 ### TestStepStarted
 
@@ -120,15 +117,14 @@ Should fire right before step execution.
 ``` json
 {
     "event": "TestStepStarted",
-    "id": "features/simple.feature:5",
+    "location": "features/simple.feature:5",
     "suite": "main"
 }
 ```
 
 1. **event** - name of event.
-2. **id** - location in feature file, based on pattern {path}:{line}.
-3. **suite** - may not be provided. Otherwise it may be used as a name for
-   filter groups.
+2. **location** - location in source file, based on pattern {path}:{line}.
+3. **suite** - `optional` may be used to distinguish test groups.
 
 ### TestStepFinished
 
@@ -138,22 +134,24 @@ status and details.
 ``` json
 {
     "event": "TestStepFinished",
-    "id": "features/simple.feature:5",
-    "suite": "main",
+    "location": "features/simple.feature:5",
     "status": "failed",
     "summary": "error - user was not found by id: 1",
-    "details": "error details\ndebug information"
+    "details": "error details\ndebug information",
+    "duration": 125690,
+    "suite": "main"
 }
 ```
 
 1. **event** - name of event.
-2. **id** - location in feature file, based on pattern {path}:{line}.
-3. **suite** - may not be provided. Otherwise it may be used as a name for
-   filter groups.
-4. **status** - can be one of **passed, failed, skipped, undefined,
+2. **location** - location in source file, based on pattern {path}:{line}.
+3. **status** - can be one of **passed, failed, skipped, undefined,
    ambiguous**.
-5. **summary** - one line summary of message. Maybe omitted.
-6. **details** - multi-line detailed description of step result.
+4. **summary** - `optional` one line summary for step result.
+5. **details** - `optional` multi-line detailed description of step
+   result.
+6. **duration** - `optional` duration in milliseconds to run step.
+7. **suite** - `optional` may be used to distinguish test groups.
 
 ### TestCaseFinished
 
@@ -163,18 +161,19 @@ Should provide appropriate result status.
 ``` json
 {
     "event": "TestCaseFinished",
-    "id": "features/simple.feature:5",
-    "suite": "main",
-    "status": "failed"
+    "location": "features/simple.feature:5",
+    "status": "failed",
+    "duration": 125690,
+    "suite": "main"
 }
 ```
 
 1. **event** - name of event.
-2. **id** - location in feature file, based on pattern {path}:{line}.
-3. **suite** - may not be provided. Otherwise it may be used as a name for
-   filter groups.
-4. **status** - can be one of **passed, failed, skipped, undefined,
+2. **location** - location in source file, based on pattern {path}:{line}.
+3. **status** - can be one of **passed, failed, skipped, undefined,
    ambiguous**.
+4. **duration** - `optional` duration in milliseconds to run test case.
+5. **suite** - `optional` may be used to distinguish test groups.
 
 ### TestRunFinished
 
@@ -185,20 +184,15 @@ and resource usage summary information.
 ``` json
 {
     "event": "TestRunFinished",
-    "id": "features/simple.feature:5",
-    "suite": "main",
     "status": "failed",
-    "time": "12m13.08977s",
-    "memory": "3.45M"
+    "duration": 125690,
+    "memory": 3456765
 }
 ```
 
 1. **event** - name of event.
-2. **id** - location in feature file, based on pattern {path}:{line}.
-3. **suite** - may not be provided. Otherwise it may be used as a name for
-   filter groups.
-4. **status** - can be one of **passed, failed, skipped, undefined,
+2. **status** - can be one of **passed, failed, skipped, undefined,
    ambiguous**.
-5. **time** - how much time it took to run tests
-6. **memory** - how much memory was consumed by tests
+3. **duration** - `optional` duration in milliseconds to run all tests
+4. **memory** - `optional` memory consumption in bytes used by all tests
 
