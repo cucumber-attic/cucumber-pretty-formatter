@@ -3,9 +3,12 @@
 # This is a fake cucumber implementation used to test `cucumber-pretty`.
 # It expects a single argument (a `testdata/*.feature` file) and will output
 # JSON events to be consumed by `cucumber-pretty`.
-#
+
 require 'json'
 feature_file = ARGV[0]
+
+raise ArgumentError, "#{$PROGRAM_NAME} <feature>.feature: Feature file is required as argument." if ARGV.size < 1
+
 puts({
   event: "SourceRead",
   feature_source_id: feature_file,
