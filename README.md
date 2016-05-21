@@ -164,7 +164,6 @@ status and details.
     "timestamp": 1461436176456,
     "summary": "error - user was not found by id: 1",
     "details": "error details\ndebug information",
-    "duration": 125690,
     "suite": "main",
     "run_id": "uuid"
 }
@@ -179,9 +178,8 @@ status and details.
 5. **summary** - `optional` one line summary for step result.
 6. **details** - `optional` multi-line detailed description of step
    result.
-7. **duration** - `optional` duration in milliseconds to run step.
-8. **suite** - `optional` may be used to distinguish test groups.
-9. **run_id** - `optional` in situations where different event streams are
+7. **suite** - `optional` may be used to distinguish test groups.
+8. **run_id** - `optional` in situations where different event streams are
    processed on single remote application.
 
 ### TestCaseFinished
