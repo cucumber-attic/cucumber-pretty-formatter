@@ -1,14 +1,15 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/cucumber/cucumber-pretty-formatter"
-	_ "github.com/cucumber/cucumber-pretty-formatter/pretty"
+	_ "github.com/cucumber/cucumber-pretty-formatter/progress"
 )
 
 func main() {
 	if err := formatter.Run(); err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
 	}
 }

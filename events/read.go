@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"gopkg.in/cucumber/gherkin-go.v3"
+	"github.com/cucumber/cucumber-pretty-formatter/gherkin"
 )
 
 type Event interface{}

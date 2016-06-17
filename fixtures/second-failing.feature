@@ -3,10 +3,10 @@ Feature: My feature
   We should be able to pretty print semi-complex feature output
 
   Scenario: First scenario
-    Given passing
-    And passing
+    When passing
+    Then passing
 
   Scenario: Second scenario
     Given passing
-    And failing
-    And skipping
+    When failing
+    Then skipping

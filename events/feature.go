@@ -1,6 +1,6 @@
 package events
 
-import "gopkg.in/cucumber/gherkin-go.v3"
+import "github.com/cucumber/cucumber-pretty-formatter/gherkin"
 
 type TestRunStarted struct {
 	ProtocolVersion string `json:"protocol_version"`
