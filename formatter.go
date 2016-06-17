@@ -50,9 +50,9 @@ func Register(name, description string, fn initializer) {
 	all = append(all, formatter{name, description, fn})
 }
 
-// Run scans input for events and runs it through configured
+// Run scans given input for events and runs it through configured
 // formatters determined from option flags.
-func Run() error {
+func Run(in io.Reader) error {
 	// @TODO: will need to read flags and initialize
 	// writers + stream events to all formatters configured
 	build := all.find("progress")
@@ -63,7 +63,8 @@ func Run() error {
 	// @TODO ansicolor support for windows
 	f := build(os.Stdout)
 
-	scanner := bufio.NewScanner(os.Stdin)
+	// @TODO many formatters may be spawned in parallel if configured
+	scanner := bufio.NewScanner(in)
 	for scanner.Scan() {
 		ev, err := events.Read(scanner.Bytes())
 		if err != nil {

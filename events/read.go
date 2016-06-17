@@ -13,7 +13,7 @@ type Event interface{}
 func Read(data []byte) (Event, error) {
 	typ, err := Type(data)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("parse event type from %s: %v", string(data), err)
 	}
 	switch typ {
 	// START feature
