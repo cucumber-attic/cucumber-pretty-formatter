@@ -80,13 +80,14 @@ func (p *printer) step(st *step) error {
 	case undefined:
 		clr = yellow
 	}
-	// @TODO: print arguments in bold
-	ln := s(4) + clr(st.step.Keyword+" "+st.step.Text)
+	// @TODO: print arguments in bold, need it in event?
+	text := st.step.Keyword + " " + st.step.Text
+	ln := s(4) + clr(text)
 
 	// step definition ref
 	if len(st.defID) > 0 {
-		gap := max - len(st.step.Keyword+st.step.Text) + 1
-		ln += s(gap) + black(" # "+st.defID)
+		gap := max - len(text)
+		ln += s(gap) + " " + black("# "+st.defID)
 	}
 
 	// print step
@@ -95,6 +96,7 @@ func (p *printer) step(st *step) error {
 	}
 
 	// argument
+	ln = ""
 	switch t := st.step.Argument.(type) {
 	case *gherkin.DataTable:
 		ln = p.table(t) + "\n"
@@ -115,6 +117,7 @@ func (p *printer) step(st *step) error {
 	}
 
 	// summary and details
+	ln = ""
 	switch st.state {
 	case failed:
 		ln = s(6) + clr(st.summary)
