@@ -18,11 +18,11 @@ func Read(data []byte) (Event, error) {
 	switch typ {
 	// START feature
 	case "TestRunStarted":
-		event := &TestRunStarted{}
-		return event, json.Unmarshal(data, event)
-	case "FeatureSourceRead":
-		event := &FeatureSourceRead{}
-		err = json.Unmarshal(data, event)
+		var event TestRunStarted
+		return event, json.Unmarshal(data, &event)
+	case "TestSource":
+		var event TestSource
+		err = json.Unmarshal(data, &event)
 		if err != nil {
 			return nil, err
 		}
@@ -34,72 +34,45 @@ func Read(data []byte) (Event, error) {
 		return event, event.parseLocation()
 	// START test case (scenario, outline example)
 	case "TestCaseStarted":
-		event := &TestCaseStarted{}
-		if err = json.Unmarshal(data, event); err != nil {
+		var event TestCaseStarted
+		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
 		return event, event.parseLocation()
 	// START step
 	case "StepDefinitionFound":
-		event := &StepDefinitionFound{}
-		if err = json.Unmarshal(data, event); err != nil {
+		var event StepDefinitionFound
+		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
 		return event, event.parseLocation()
 	case "TestStepStarted":
-		event := &TestStepStarted{}
-		if err = json.Unmarshal(data, event); err != nil {
+		var event TestStepStarted
+		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
 		return event, event.parseLocation()
-	case "TestStepPassed":
-		event := &TestStepPassed{}
-		if err = json.Unmarshal(data, event); err != nil {
-			return nil, err
-		}
-		return event, event.parseLocation()
-	case "TestStepFailed":
-		event := &TestStepFailed{}
-		if err = json.Unmarshal(data, event); err != nil {
-			return nil, err
-		}
-		return event, event.parseLocation()
-	case "TestStepSkipped":
-		event := &TestStepSkipped{}
-		if err = json.Unmarshal(data, event); err != nil {
-			return nil, err
-		}
-		return event, event.parseLocation()
-	case "TestStepUndefined":
-		event := &TestStepUndefined{}
-		if err = json.Unmarshal(data, event); err != nil {
-			return nil, err
-		}
-		return event, event.parseLocation()
-	case "TestStepAmbiguous":
-		event := &TestStepAmbiguous{}
-		if err = json.Unmarshal(data, event); err != nil {
+	case "TestStepFinished":
+		var event TestStepFinished
+		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
 		return event, event.parseLocation()
 	// END step
-	case "TestCasePassed":
-		event := &TestCasePassed{}
-		if err = json.Unmarshal(data, event); err != nil {
-			return nil, err
-		}
-		return event, event.parseLocation()
-	case "TestCaseFailed":
-		event := &TestCaseFailed{}
-		if err = json.Unmarshal(data, event); err != nil {
+	case "TestCaseFinished":
+		var event TestCaseFinished
+		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
 		return event, event.parseLocation()
 	// END test case
 	case "TestRunFinished":
-		event := &TestRunFinished{}
-		return event, json.Unmarshal(data, event)
+		var event TestRunFinished
+		return event, json.Unmarshal(data, &event)
 	// END feature
+	case "TestAttachment":
+		var event TestAttachment
+		return event, json.Unmarshal(data, &event)
 	default:
 		return nil, fmt.Errorf(`undetermined event type: "%s" parsed from input: %s`, typ, string(data))
 	}
