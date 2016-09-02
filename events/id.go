@@ -43,10 +43,10 @@ func (t UnixTimestampMS) MarshalJSON() ([]byte, error) {
 }
 
 func (t *UnixTimestampMS) UnmarshalJSON(b []byte) error {
-	tm, err := strconv.Atoi(string(b))
+	tm, err := strconv.ParseInt(string(b), 10, 64)
 	if err != nil {
 		return err
 	}
-	t.Time = time.Unix(0, int64(tm*int(time.Millisecond)))
+	t.Time = time.Unix(0, tm*int64(time.Millisecond))
 	return nil
 }
