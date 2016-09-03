@@ -19,7 +19,10 @@ func Read(data []byte) (Event, error) {
 	// START feature
 	case "TestRunStarted":
 		var event TestRunStarted
-		return event, json.Unmarshal(data, &event)
+		if err := json.Unmarshal(data, &event); err != nil {
+			return nil, err
+		}
+		return event, nil
 	case "TestSource":
 		var event TestSource
 		err = json.Unmarshal(data, &event)
@@ -31,48 +34,75 @@ func Read(data []byte) (Event, error) {
 		if err != nil {
 			return nil, err
 		}
-		return event, event.parseLocation()
+
+		if err := event.parseLocation(); err != nil {
+			return nil, err
+		}
+		return event, nil
 	// START test case (scenario, outline example)
 	case "TestCaseStarted":
 		var event TestCaseStarted
 		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
-		return event, event.parseLocation()
+
+		if err := event.parseLocation(); err != nil {
+			return nil, err
+		}
+		return event, nil
 	// START step
 	case "StepDefinitionFound":
 		var event StepDefinitionFound
 		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
-		return event, event.parseLocation()
+
+		if err := event.parseLocation(); err != nil {
+			return nil, err
+		}
+		return event, nil
 	case "TestStepStarted":
 		var event TestStepStarted
 		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
-		return event, event.parseLocation()
+		if err := event.parseLocation(); err != nil {
+			return nil, err
+		}
+		return event, nil
 	case "TestStepFinished":
 		var event TestStepFinished
 		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
-		return event, event.parseLocation()
+		if err := event.parseLocation(); err != nil {
+			return nil, err
+		}
+		return event, nil
 	// END step
 	case "TestCaseFinished":
 		var event TestCaseFinished
 		if err = json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
-		return event, event.parseLocation()
+		if err := event.parseLocation(); err != nil {
+			return nil, err
+		}
+		return event, nil
 	// END test case
 	case "TestRunFinished":
 		var event TestRunFinished
-		return event, json.Unmarshal(data, &event)
+		if err := json.Unmarshal(data, &event); err != nil {
+			return nil, err
+		}
+		return event, nil
 	// END feature
 	case "TestAttachment":
 		var event TestAttachment
-		return event, json.Unmarshal(data, &event)
+		if err := json.Unmarshal(data, &event); err != nil {
+			return nil, err
+		}
+		return event, nil
 	default:
 		return nil, fmt.Errorf(`undetermined event type: "%s" parsed from input: %s`, typ, string(data))
 	}

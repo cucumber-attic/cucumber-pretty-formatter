@@ -3,8 +3,8 @@ package events
 import "github.com/cucumber/cucumber-pretty-formatter/gherkin"
 
 type TestRunStarted struct {
-	Version   string          `json:"version"`
-	Timestamp UnixTimestampMS `json:"timestamp"`
+	Version   string `json:"version"`
+	Timestamp int64  `json:"timestamp"`
 }
 
 type TestSource struct {
@@ -21,38 +21,38 @@ type StepDefinitionFound struct {
 
 type TestCaseStarted struct {
 	identifier
-	Timestamp UnixTimestampMS `json:"timestamp"`
+	Timestamp int64 `json:"timestamp"`
 }
 
 type TestStepStarted struct {
 	identifier
-	Timestamp UnixTimestampMS `json:"timestamp"`
+	Timestamp int64 `json:"timestamp"`
 }
 
 type TestStepFinished struct {
 	identifier
-	Timestamp UnixTimestampMS `json:"timestamp"`
-	Status    string          `json:"status"`
-	Summary   string          `json:"summary"`
-	Details   string          `json:"details"`
+	Timestamp int64  `json:"timestamp"`
+	Status    string `json:"status"`
+	Summary   string `json:"summary"`
+	Details   string `json:"details"`
 }
 
 type TestCaseFinished struct {
 	identifier
-	Timestamp UnixTimestampMS `json:"timestamp"`
-	Status    string          `json:"status"`
+	Timestamp int64  `json:"timestamp"`
+	Status    string `json:"status"`
 }
 
 type TestRunFinished struct {
-	Timestamp UnixTimestampMS `json:"timestamp"`
-	Status    string          `json:"status"`
-	Memory    string          `json:"memory"`
+	Timestamp int64  `json:"timestamp"`
+	Status    string `json:"status"`
+	Memory    string `json:"memory"`
 }
 
 type TestAttachment struct {
 	identifier
-	Timestamp UnixTimestampMS `json:"timestamp"`
-	MimeType  string          `json:"mimeType"`
-	Data      []byte          `json:"data"`
-	Encoding  string          `json:"encoding"`
+	Timestamp int64  `json:"timestamp"`
+	MimeType  string `json:"mimeType"`
+	Data      []byte `json:"data"`
+	Encoding  string `json:"encoding"`
 }

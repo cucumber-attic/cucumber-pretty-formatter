@@ -150,8 +150,8 @@ status and details.
 
 1. **event** - name of event.
 2. **location** - location in source file, based on pattern {path}:{line}.
-3. **status** - can be one of **passed, failed, skipped, undefined,
-   ambiguous**.
+3. **status** - can be one of **passed, failed, skipped, pending,
+   undefined, ambiguous**.
 4. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test step finished.
 5. **summary** - `optional` one line summary for step result.
@@ -174,8 +174,8 @@ Should provide appropriate result status.
 
 1. **event** - name of event.
 2. **location** - location in source file, based on pattern {path}:{line}.
-3. **status** - can be one of **passed, failed, skipped, undefined,
-   ambiguous**.
+3. **status** - can be one of **passed, failed, skipped, pending,
+   undefined, ambiguous**.
 4. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test case finished.
 
@@ -195,8 +195,8 @@ and resource usage summary information.
 ```
 
 1. **event** - name of event.
-2. **status** - can be one of **passed, failed, skipped, undefined,
-   ambiguous**.
+2. **status** - can be one of **passed, failed, skipped, pending,
+   undefined, ambiguous**.
 3. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test run finished.
 4. **memory** - `optional` memory consumption in bytes used by all tests

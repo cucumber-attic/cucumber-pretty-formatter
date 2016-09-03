@@ -1,11 +1,9 @@
 package events
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type identifier struct {
@@ -31,21 +29,4 @@ func Location(s string) (string, int, error) {
 	}
 
 	return s[:delimIdx], line, nil
-}
-
-type UnixTimestampMS struct {
-	time.Time
-}
-
-func (t UnixTimestampMS) MarshalJSON() ([]byte, error) {
-	return json.Marshal(t.Time.UnixNano() / int64(time.Millisecond))
-}
-
-func (t *UnixTimestampMS) UnmarshalJSON(b []byte) error {
-	tm, err := strconv.ParseInt(string(b), 10, 64)
-	if err != nil {
-		return err
-	}
-	t.Time = time.Unix(0, tm*int64(time.Millisecond))
-	return nil
 }
