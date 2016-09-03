@@ -10,9 +10,8 @@ import (
 
 type identifier struct {
 	Location string `json:"location"` // feature identifier
-	RunID    string `json:"run_id"`
-	Path     string `json:"-"` // feature path
-	Line     int    `json:"-"` // feature identification line
+	Path     string `json:"-"`        // feature path
+	Line     int    `json:"-"`        // feature identification line
 }
 
 func (i *identifier) parseLocation() (err error) {

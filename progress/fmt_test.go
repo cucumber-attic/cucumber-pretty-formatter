@@ -16,7 +16,7 @@ func TestShouldMatchSupportedProtocol(t *testing.T) {
 	}
 
 	for n, c := range cases {
-		if supportedProtocol.MatchString(c.vers) != c.matches {
+		if supportedVersion.MatchString(c.vers) != c.matches {
 			t.Fatalf("case %d failed, expected %s to be %+v", n, c.vers, c.matches)
 		}
 	}

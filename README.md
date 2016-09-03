@@ -44,7 +44,7 @@ Triggers when tests are started. Specifies protocol version.
     "event": "TestRunStarted",
     "version": "0.1.0",
     "timestamp": 1461436176456,
-    "run_id": "uuid"
+    "suite": "main"
 }
 ```
 
@@ -53,8 +53,7 @@ Triggers when tests are started. Specifies protocol version.
    provided, latest stable protocol version is expected.
 3. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test run started.
-4. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
+4. **suite** - `optional` name of the test suite.
 
 ### TestSource
 
@@ -66,16 +65,13 @@ determined by source extension found in **location**.
 {
     "event": "TestSource",
     "location": "features/simple.feature:1",
-    "source": "Feature:\n  Scenario: passing\n    Given passes",
-    "run_id": "uuid"
+    "source": "Feature:\n  Scenario: passing\n    Given passes"
 }
 ```
 
 1. **event** - name of event.
 2. **location** - location in source file, based on pattern {path}:{line}.
 3. **source** - is plain text of test source.
-4. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
 
 ### StepDefinitionFound
 
@@ -87,25 +83,20 @@ implementation in the source code. Note: there may be ambiguous matches.
 {
     "event": "StepDefinitionFound",
     "location": "features/simple.feature:5",
-    "definition_id": "FeatureContext::passing():6",
+    "definition": "FeatureContext::passing():6",
     "arguments": [
         [12, 18],
         [23, 26]
-    ],
-    "suite": "main",
-    "run_id": "uuid"
+    ]
 }
 ```
 
 1. **event** - name of event.
 2. **location** - location in source file, based on pattern {path}:{line}.
-3. **definition_id** - reference to step definition in source code.
+3. **definition** - reference to step definition in source code.
 4. **arguments** - list of positions for arguments which were matched.
    Positions are determined on **step text** step keyword should be
    omitted when calculating argument positions.
-5. **suite** - `optional` may be used to distinguish test groups.
-6. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
 
 ### TestCaseStarted
 
@@ -115,9 +106,7 @@ Should fire when starting to execute scenario or scenario outline example.
 {
     "event": "TestCaseStarted",
     "location": "features/simple.feature:4",
-    "timestamp": 1461436176456,
-    "suite": "main",
-    "run_id": "uuid"
+    "timestamp": 1461436176456
 }
 ```
 
@@ -125,9 +114,6 @@ Should fire when starting to execute scenario or scenario outline example.
 2. **location** - location in source file, based on pattern {path}:{line}.
 3. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test case started.
-4. **suite** - `optional` may be used to distinguish test groups.
-5. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
 
 ### TestStepStarted
 
@@ -137,9 +123,7 @@ Should fire right before step execution.
 {
     "event": "TestStepStarted",
     "location": "features/simple.feature:5",
-    "timestamp": 1461436176456,
-    "suite": "main",
-    "run_id": "uuid"
+    "timestamp": 1461436176456
 }
 ```
 
@@ -147,9 +131,6 @@ Should fire right before step execution.
 2. **location** - location in source file, based on pattern {path}:{line}.
 3. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test step started.
-4. **suite** - `optional` may be used to distinguish test groups.
-5. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
 
 ### TestStepFinished
 
@@ -163,9 +144,7 @@ status and details.
     "status": "failed",
     "timestamp": 1461436176456,
     "summary": "error - user was not found by id: 1",
-    "details": "error details\ndebug information",
-    "suite": "main",
-    "run_id": "uuid"
+    "details": "error details\ndebug information"
 }
 ```
 
@@ -178,9 +157,6 @@ status and details.
 5. **summary** - `optional` one line summary for step result.
 6. **details** - `optional` multi-line detailed description of step
    result.
-7. **suite** - `optional` may be used to distinguish test groups.
-8. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
 
 ### TestCaseFinished
 
@@ -192,9 +168,7 @@ Should provide appropriate result status.
     "event": "TestCaseFinished",
     "location": "features/simple.feature:5",
     "status": "failed",
-    "timestamp": 1461436176456,
-    "suite": "main",
-    "run_id": "uuid"
+    "timestamp": 1461436176456
 }
 ```
 
@@ -204,9 +178,6 @@ Should provide appropriate result status.
    ambiguous**.
 4. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test case finished.
-5. **suite** - `optional` may be used to distinguish test groups.
-6. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
 
 ### TestRunFinished
 
@@ -219,8 +190,7 @@ and resource usage summary information.
     "event": "TestRunFinished",
     "status": "failed",
     "timestamp": 1461436176456,
-    "memory": 3456765,
-    "run_id": "uuid"
+    "memory": 3456765
 }
 ```
 
@@ -230,8 +200,6 @@ and resource usage summary information.
 3. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test run finished.
 4. **memory** - `optional` memory consumption in bytes used by all tests
-5. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
 
 ### TestAttachment
 
@@ -242,23 +210,18 @@ exception stack traces.
 {
     "event": "TestAttachment",
     "location": "features/simple.feature:5",
-    "mime_type": "image/png",
+    "mime": "image/png",
     "data": "YWJjZGU=",
     "encoding": "base64",
-    "timestamp": 1461436176456,
-    "suite": "main",
-    "run_id": "uuid"
+    "timestamp": 1461436176456
 }
 ```
 
 1. **event** - name of event.
 2. **location** - location in source file, based on pattern {path}:{line}.
-3. **mime_type** - mime type of given media file.
+3. **mime** - mime type of given media file.
 4. **data** - encoded data.
 5. **encoding** - data must be encoded to transfer with json format,
    usually base64 or base85.
 6. **timestamp** - unix timestamp in milliseconds since epoch. When the
    attachment was created.
-7. **suite** - `optional` may be used to distinguish test groups.
-8. **run_id** - `optional` in situations where different event streams are
-   processed on single remote application.
