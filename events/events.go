@@ -47,12 +47,13 @@ type TestRunFinished struct {
 	Timestamp int64  `json:"timestamp"`
 	Status    string `json:"status"`
 	Memory    string `json:"memory"`
+	Snippets  string `json:"snippets"`
 }
 
 type TestAttachment struct {
 	identifier
 	Timestamp int64  `json:"timestamp"`
-	MimeType  string `json:"mimeType"`
+	Mime      string `json:"mime"`
 	Data      []byte `json:"data"`
 	Encoding  string `json:"encoding"`
 }

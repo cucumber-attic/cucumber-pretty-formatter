@@ -11,6 +11,7 @@ import (
 	"github.com/cucumber/cucumber-pretty-formatter"
 	"github.com/cucumber/cucumber-pretty-formatter/colors"
 	"github.com/cucumber/cucumber-pretty-formatter/events"
+	"github.com/cucumber/cucumber-pretty-formatter/gherkin"
 )
 
 var supportedVersion = regexp.MustCompile(`0\.1\.[\d]+`)
@@ -79,21 +80,61 @@ func (s *stats) summary(out io.Writer, typ string) (err error) {
 	return
 }
 
+type failure struct {
+	step  *gherkin.Step
+	event events.TestStepFinished
+}
+
 type format struct {
-	out     io.Writer
-	started time.Time
+	out      io.Writer
+	started  time.Time
+	feature  *gherkin.Feature
+	failures []*failure
 
 	steps, cases *stats
 }
 
-func (f *format) step(status string) (err error) {
-	switch status {
+func (f *format) locateStep(line int) *gherkin.Step {
+	if f.feature.Background != nil {
+		for _, step := range f.feature.Background.Steps {
+			if step.Location.Line == line {
+				return step
+			}
+		}
+	}
+	for _, def := range f.feature.ScenarioDefinitions {
+		if outline, ok := def.(*gherkin.ScenarioOutline); ok {
+			for _, step := range outline.Steps {
+				if step.Location.Line == line {
+					return step
+				}
+			}
+		}
+
+		if scenario, ok := def.(*gherkin.Scenario); ok {
+			for _, step := range scenario.Steps {
+				if step.Location.Line == line {
+					return step
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func (f *format) step(e events.TestStepFinished) (err error) {
+	switch e.Status {
 	case "passed":
 		_, err = fmt.Fprint(f.out, colors.Green("."))
 		f.steps.passed++
 	case "failed":
 		_, err = fmt.Fprint(f.out, colors.Red("F"))
 		f.steps.failed++
+		if step := f.locateStep(e.Line); step != nil {
+			f.failures = append(f.failures, &failure{step, e})
+		} else {
+			return fmt.Errorf("step could not be located in the feature by location: %s", e.Location)
+		}
 	case "skipped":
 		_, err = fmt.Fprint(f.out, colors.Cyan("_"))
 		f.steps.skipped++
@@ -159,12 +200,11 @@ func (f *format) summary(e events.TestRunFinished) error {
 		return err
 	}
 
-	// fmt.Println(e.Timestamp.Format(time.RFC3339), f.started.Format(time.RFC3339))
-
-	// if text := f.snippets(); text != "" {
-	// 	fmt.Println(cl("\nYou can implement step definitions for undefined steps with these snippets:", yellow))
-	// 	fmt.Println(cl(text, yellow))
-	// }
+	if len(e.Snippets) > 0 {
+		if _, err := fmt.Fprintln(f.out, "\n"+colors.Yellow(e.Snippets)); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -175,8 +215,10 @@ func (f *format) Event(e events.Event) error {
 		if len(t.Version) > 0 && !supportedVersion.MatchString(t.Version) {
 			return fmt.Errorf("event protocol version: %s is not supported - only 0.1.x versions are.", t.Version)
 		}
+	case events.TestSource:
+		f.feature = t.Feature
 	case events.TestStepFinished:
-		if err := f.step(t.Status); err != nil {
+		if err := f.step(t); err != nil {
 			return fmt.Errorf("failed to print step status to formatter output: %v", err)
 		}
 	case events.TestCaseFinished:

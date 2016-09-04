@@ -190,7 +190,8 @@ and resource usage summary information.
     "event": "TestRunFinished",
     "status": "failed",
     "timestamp": 1461436176456,
-    "memory": 3456765
+    "memory": 3456765,
+    "snippets": "implement undefined steps with the following snippets:"
 }
 ```
 
@@ -199,7 +200,9 @@ and resource usage summary information.
    undefined, ambiguous**.
 3. **timestamp** - unix timestamp in milliseconds since epoch. When the
    test run finished.
-4. **memory** - `optional` memory consumption in bytes used by all tests
+4. **memory** - `optional` memory consumption in bytes used by all tests.
+5. **snippets** - `optional` undefined step implementation source code
+   snippets.
 
 ### TestAttachment
 
