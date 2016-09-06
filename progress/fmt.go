@@ -16,6 +16,8 @@ import (
 
 var supportedVersion = regexp.MustCompile(`0\.1\.[\d]+`)
 
+var trim = strings.TrimSpace
+
 const formaterDescription = "progress formatter"
 const stepsPerRow = 70
 
@@ -45,7 +47,7 @@ func (s *stats) total() int {
 	return s.passed + s.failed + s.undefined + s.skipped + s.ambiguous + s.pending
 }
 
-func (s *stats) summary(out io.Writer, typ string) (err error) {
+func (s *stats) summary(typ string) string {
 	var parts []string
 
 	if s.passed > 0 {
@@ -73,11 +75,9 @@ func (s *stats) summary(out io.Writer, typ string) (err error) {
 	}
 
 	if s.total() == 0 {
-		_, err = fmt.Fprintf(out, "No %s\n", typ)
-	} else {
-		_, err = fmt.Fprintf(out, "%d %s (%s)\n", s.total(), typ, strings.Join(parts, ", "))
+		return fmt.Sprintf("No %s\n", typ)
 	}
-	return
+	return fmt.Sprintf("%d %s (%s)\n", s.total(), typ, strings.Join(parts, ", "))
 }
 
 type failure struct {
@@ -141,6 +141,9 @@ func (f *format) step(e events.TestStepFinished) (err error) {
 	case "undefined":
 		_, err = fmt.Fprint(f.out, colors.Yellow("U"))
 		f.steps.undefined++
+	case "pending":
+		_, err = fmt.Fprint(f.out, colors.Yellow("P"))
+		f.steps.pending++
 	case "ambiguous":
 		_, err = fmt.Fprint(f.out, colors.Red("A")) // @TODO: check sign and color
 		f.steps.ambiguous++
@@ -172,23 +175,31 @@ func (f *format) fcase(status string) {
 }
 
 func (f *format) summary(e events.TestRunFinished) error {
+	var buf string
 	if left := math.Mod(float64(f.steps.total()), float64(stepsPerRow)); left != 0 {
-		if _, err := fmt.Fprintf(f.out, "%s %d\n", strings.Repeat(" ", stepsPerRow-int(left)), f.steps.total()); err != nil {
-			return err
+		buf += fmt.Sprintf("%s %d\n", strings.Repeat(" ", stepsPerRow-int(left)), f.steps.total())
+	}
+
+	buf += "\n"
+
+	if len(f.failures) > 0 {
+		buf += "\n--- " + colors.Red("Failed steps:") + "\n"
+		for _, fail := range f.failures {
+			buf += strings.Repeat(" ", 4)
+			buf += colors.Red(trim(fail.step.Keyword) + " " + trim(fail.step.Text))
+			buf += colors.Black(" # " + fail.event.Location)
+			buf += "\n"
+
+			buf += strings.Repeat(" ", 6)
+			buf += colors.Red("Error: ")
+			buf += colors.RedB(fail.event.Summary)
+			buf += "\n"
 		}
+		buf += "\n"
 	}
 
-	if _, err := fmt.Fprintln(f.out); err != nil {
-		return err
-	}
-
-	if err := f.cases.summary(f.out, "scenarios"); err != nil {
-		return err
-	}
-
-	if err := f.steps.summary(f.out, "steps"); err != nil {
-		return err
-	}
+	buf += f.cases.summary("scenarios")
+	buf += f.steps.summary("steps")
 
 	finishedAt := time.Unix(0, e.Timestamp*int64(time.Millisecond))
 	usage := finishedAt.Sub(f.started).String()
@@ -196,16 +207,13 @@ func (f *format) summary(e events.TestRunFinished) error {
 		usage += fmt.Sprintf(" (%s)", e.Memory)
 	}
 
-	if _, err := fmt.Fprintln(f.out, usage); err != nil {
-		return err
-	}
+	buf += usage + "\n"
 
 	if len(e.Snippets) > 0 {
-		if _, err := fmt.Fprintln(f.out, "\n"+colors.Yellow(e.Snippets)); err != nil {
-			return err
-		}
+		buf += "\n" + colors.Yellow(e.Snippets)
 	}
-	return nil
+	_, err := fmt.Fprintln(f.out, buf)
+	return err
 }
 
 func (f *format) Event(e events.Event) error {

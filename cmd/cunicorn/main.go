@@ -11,5 +11,6 @@ import (
 func main() {
 	if err := formatter.Run(os.Stdin); err != nil {
 		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 }

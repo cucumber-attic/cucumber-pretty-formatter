@@ -8,11 +8,11 @@ import (
 const ansiEscape = "\x1b"
 
 // a color code type
-type Color int
+type color int
 
 // some ansi colors
 const (
-	black Color = iota + 30
+	black color = iota + 30
 	red
 	green
 	yellow
@@ -22,55 +22,42 @@ const (
 	white
 )
 
-func (c Color) Name() string {
-	switch c {
-	case red:
-		return "red"
-	case cyan:
-		return "cyan"
-	case yellow:
-		return "yellow"
-	case black:
-		return "black"
-	case blue:
-		return "blue"
-	case green:
-		return "green"
-	case magenta:
-		return "magenta"
-	default:
-		return "white"
-	}
-}
-
-var Colorize = func(s interface{}, c Color) string {
+func colorize(s interface{}, c color) string {
 	return fmt.Sprintf("%s[%dm%v%s[0m", ansiEscape, c, s, ansiEscape)
 }
 
-var Bold = func(s string) string {
+func bold(s string) string {
 	return strings.Replace(s, ansiEscape+"[", ansiEscape+"[1;", 1)
 }
 
 func Red(s interface{}) string {
-	return Colorize(s, red)
+	return colorize(s, red)
+}
+
+func RedB(s interface{}) string {
+	return bold(Red(s))
 }
 
 func Green(s interface{}) string {
-	return Colorize(s, green)
+	return colorize(s, green)
 }
 
 func Cyan(s interface{}) string {
-	return Colorize(s, cyan)
+	return colorize(s, cyan)
 }
 
 func Black(s interface{}) string {
-	return Colorize(s, black)
+	return colorize(s, black)
 }
 
 func Yellow(s interface{}) string {
-	return Colorize(s, yellow)
+	return colorize(s, yellow)
 }
 
 func White(s interface{}) string {
-	return Colorize(s, white)
+	return colorize(s, white)
+}
+
+func WhiteB(s interface{}) string {
+	return bold(White(s))
 }

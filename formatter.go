@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/cucumber/cucumber-pretty-formatter/colors"
 	"github.com/cucumber/cucumber-pretty-formatter/events"
 )
 
@@ -60,8 +61,7 @@ func Run(in io.Reader) error {
 		return fmt.Errorf("formatter: '%s' is not available", "progress")
 	}
 	// @TODO output should be configured from flags
-	// @TODO ansicolor support for windows
-	f := build(os.Stdout)
+	f := build(colors.Writer(os.Stdout))
 
 	// @TODO many formatters may be spawned in parallel if configured
 	scanner := bufio.NewScanner(in)
