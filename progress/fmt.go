@@ -207,10 +207,10 @@ func (f *format) summary(e events.TestRunFinished) error {
 		usage += fmt.Sprintf(" (%s)", e.Memory)
 	}
 
-	buf += usage + "\n"
+	buf += usage
 
 	if len(e.Snippets) > 0 {
-		buf += "\n" + colors.Yellow(e.Snippets)
+		buf += "\n\n" + colors.Yellow(e.Snippets)
 	}
 	_, err := fmt.Fprintln(f.out, buf)
 	return err
