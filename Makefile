@@ -7,7 +7,7 @@ PROGRESS_FMT_FILES = $(patsubst %.feature,%.progress,$(FEATURE_FILES))
 all: clean deps $(PROGRESS_FMT_FILES)
 
 %.progress: %.json
-	cunicorn < $< > $@
+	cunicorn -f progress --no-colors < $< > $@
 
 %.json:
 	godog -f events $(subst .json,.feature,$@) > $@

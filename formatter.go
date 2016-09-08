@@ -53,29 +53,38 @@ func Register(name, description string, fn initializer) {
 
 // Run scans given input for events and runs it through configured
 // formatters determined from option flags.
-func Run(in io.Reader) error {
-	// @TODO: will need to read flags and initialize
-	// writers + stream events to all formatters configured
-	build := all.find("progress")
-	if nil == build {
-		return fmt.Errorf("formatter: '%s' is not available", "progress")
+func Run(opts Options) (status int, err error) {
+	defer opts.EventInputStream.Close()
+
+	var output io.Writer = os.Stdout
+	if opts.NoColors {
+		output = colors.Uncolored(output)
+	} else {
+		output = colors.Colored(output)
 	}
-	// @TODO output should be configured from flags
-	f := build(colors.Writer(os.Stdout))
+
+	// @TODO output should be configured with formatter name
+	formats := make([]Formatter, len(opts.Formats))
+	for i, name := range opts.Formats {
+		if build := all.find(name); build == nil {
+			return status, fmt.Errorf("formatter: '%s' is not available", name)
+		} else {
+			formats[i] = build(output)
+		}
+	}
 
 	// @TODO many formatters may be spawned in parallel if configured
-	scanner := bufio.NewScanner(in)
+	scanner := bufio.NewScanner(opts.EventInputStream)
 	for scanner.Scan() {
 		ev, err := events.Read(scanner.Bytes())
 		if err != nil {
-			return err
+			return status, err
 		}
-		if err := f.Event(ev); err != nil {
-			return err
+		for _, f := range formats {
+			if err := f.Event(ev); err != nil {
+				return status, err
+			}
 		}
 	}
-	if err := scanner.Err(); err != nil {
-		return err
-	}
-	return nil
+	return status, scanner.Err()
 }

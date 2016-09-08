@@ -19,12 +19,12 @@ const (
 	outputNonColorEscSeq
 )
 
-// Writer creates and initializes a new ansiColorWriter
+// Colored creates and initializes a new ansiColorWriter
 // using io.Writer w as its initial contents.
 // In the console of Windows, which change the foreground and background
 // colors of the text by the escape sequence.
 // In the console of other systems, which writes to w all text.
-func Writer(w io.Writer) io.Writer {
+func Colored(w io.Writer) io.Writer {
 	return createModeAnsiColorWriter(w, discardNonColorEscSeq)
 }
 

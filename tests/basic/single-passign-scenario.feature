@@ -5,5 +5,5 @@ Feature: Single passing scenario
 
   Scenario: Scenario
     Given passing
-    And passing
+    When passing
     Then passing
