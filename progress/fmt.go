@@ -201,9 +201,9 @@ func (f *format) summary(e events.TestRunFinished) error {
 	buf += f.cases.summary("scenarios")
 	buf += f.steps.summary("steps")
 
-	finishedAt := time.Unix(0, e.Timestamp*int64(time.Millisecond))
+	finishedAt := e.Timestamp.Unix()
 	usage := finishedAt.Sub(f.started).String()
-	if len(e.Memory) > 0 {
+	if len(e.Memory.String()) > 0 {
 		usage += fmt.Sprintf(" (%s)", e.Memory)
 	}
 
@@ -219,7 +219,7 @@ func (f *format) summary(e events.TestRunFinished) error {
 func (f *format) Event(e events.Event) error {
 	switch t := e.(type) {
 	case events.TestRunStarted:
-		f.started = time.Unix(0, t.Timestamp*int64(time.Millisecond))
+		f.started = t.Timestamp.Unix()
 		if len(t.Version) > 0 && !supportedVersion.MatchString(t.Version) {
 			return fmt.Errorf("event protocol version: %s is not supported - only 0.1.x versions are.", t.Version)
 		}

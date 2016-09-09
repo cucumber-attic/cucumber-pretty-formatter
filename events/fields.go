@@ -1,9 +1,11 @@
 package events
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type identifier struct {
@@ -29,4 +31,24 @@ func Location(s string) (string, int, error) {
 	}
 
 	return s[:delimIdx], line, nil
+}
+
+type Timestamp int64
+
+func (t Timestamp) Unix() time.Time {
+	return time.Unix(0, int64(t))
+}
+
+func (t Timestamp) MarshalJSON() ([]byte, error) {
+	return json.Marshal(int64(t) / int64(time.Millisecond))
+}
+
+type Memory string
+
+func (m Memory) String() string {
+	return string(m)
+}
+
+func (m Memory) MarshalJSON() ([]byte, error) {
+	return json.Marshal(string(m))
 }
