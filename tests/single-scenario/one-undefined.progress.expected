@@ -1,0 +1,16 @@
+U                                                                      1
+
+1 scenarios (1 undefined)
+1 steps (1 undefined)
+0s (0B)
+
+You can implement step definitions for undefined steps with these snippets:
+
+func undefined() error {
+	return godog.ErrPending
+}
+
+func FeatureContext(s *godog.Suite) {
+	s.Step(`^undefined$`, undefined)
+}
+

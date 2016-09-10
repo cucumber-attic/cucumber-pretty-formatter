@@ -180,7 +180,9 @@ func (f *format) summary(e events.TestRunFinished) error {
 		buf += fmt.Sprintf("%s %d\n", strings.Repeat(" ", stepsPerRow-int(left)), f.steps.total())
 	}
 
-	buf += "\n"
+	if f.steps.total() > 0 {
+		buf += "\n"
+	}
 
 	if len(f.failures) > 0 {
 		buf += "\n--- " + colors.Red("Failed steps:") + "\n"
