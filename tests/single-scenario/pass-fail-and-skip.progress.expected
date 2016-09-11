@@ -1,0 +1,9 @@
+.F_                                                                    3
+
+--- Failed steps:
+    When failing # tests/single-scenario/pass-fail-and-skip.feature:8
+      Error: step failed error
+
+1 scenarios (1 failed)
+3 steps (1 passed, 1 failed, 1 skipped)
+0s (0B)

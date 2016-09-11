@@ -1,0 +1,9 @@
+F                                                                      1
+
+--- Failed steps:
+    Then failing # tests/single-scenario/one-failing.feature:7
+      Error: step failed error
+
+1 scenarios (1 failed)
+1 steps (1 failed)
+0s (0B)
