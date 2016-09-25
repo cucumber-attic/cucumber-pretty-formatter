@@ -1,4 +1,6 @@
-.PHONY: deps
+.PHONY: deps install
+
+PREFIX ?= /usr/local
 
 FEATURE_FILES = $(shell find ./tests -name "*.feature")
 EVENT_FILES = $(patsubst %.feature,%.json,$(FEATURE_FILES))
@@ -21,8 +23,12 @@ all: deps clean cunicorn $(EVENT_FILES) $(PROGRESS_FMT_FILES)
 cunicorn:
 	@cd cmd/cunicorn && go build --tags=testing -o ../../cunicorn
 
+# NOTE: needs to be at event-stream branch
 deps:
 	@go get github.com/DATA-DOG/godog/cmd/godog
 
 clean:
 	@rm -f cunicorn $(PROGRESS_FMT_FILES) $(EVENT_FILES)
+
+install:
+	cd cmd/cunicorn && go build && upx --best cunicorn && sudo mv cunicorn $(PREFIX)/bin

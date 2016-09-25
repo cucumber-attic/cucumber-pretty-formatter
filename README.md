@@ -18,6 +18,21 @@ Formatter error output should be **stderr**
 So far it is only a proof of concept and events have no clear
 specification.
 
+Currently implemented formatters:
+
+- progress
+
+## Integration
+
+The formatter will be shipped as binary for all OS architectures
+separately. A cucumber implementation could advice user to install it with
+a single one liner command so it is available in **PATH** or install it
+together with a cucumber implementation.
+
+If cucumber implementation see this binary in **PATH** then it could
+stream events through it and output specific format to the stdout or other
+output stream.
+
 ## Events
 
 In order to be able to print results in all different kind of formats.
