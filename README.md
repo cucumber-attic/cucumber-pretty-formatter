@@ -11,7 +11,7 @@ tool to get the actual **pretty, junit...** format output.
 There are many other ideas how this could extend, but their are not clear
 yet, like a common test suite for all implementations.
 
-Formatter error output should be **stderr**
+Formatter error output should be **stderr**.
 
 ## Status
 
@@ -24,12 +24,12 @@ Currently implemented formatters:
 
 ## Integration
 
-The formatter will be shipped as binary for all OS architectures
+The formatter will be shipped as a binary for all OS architectures
 separately. A cucumber implementation could advice user to install it with
-a single one liner command so it is available in **PATH** or install it
+a single one liner command so it is available in **`PATH`** or install it
 together with a cucumber implementation.
 
-If cucumber implementation see this binary in **PATH** then it could
+If cucumber implementation see this binary in **`PATH`** then it could
 stream events through it and output specific format to the stdout or other
 output stream.
 
@@ -39,18 +39,18 @@ In order to be able to print results in all different kind of formats.
 General purpose formatter, expects these events passed in as a stream of
 **json** objects.
 
-1. [TestRunStarted](#testrunstarted)
-2. [TestSource](#testsource)
-3. [StepDefinitionFound](#stepdefinitionfound)
-4. [TestCaseStarted](#testcasestarted)
-5. [TestStepStarted](#teststepstarted)
-6. [TestStepFinished](#teststepfinished)
-7. [TestCaseFinished](#testcasefinished)
-8. [TestRunFinished](#testrunfinished)
-9. [TestAttachment](#testattachment)
+1. [`TestRunStarted`](#testrunstarted)
+2. [`TestSource`](#testsource)
+3. [`StepDefinitionFound`](#stepdefinitionfound)
+4. [`TestCaseStarted`](#testcasestarted)
+5. [`TestStepStarted`](#teststepstarted)
+6. [`TestStepFinished`](#teststepfinished)
+7. [`TestCaseFinished`](#testcasefinished)
+8. [`TestRunFinished`](#testrunfinished)
+9. [`TestAttachment`](#testattachment)
 
 
-### TestRunStarted
+### `TestRunStarted`
 
 Triggers when tests are started. Specifies protocol version.
 
@@ -63,18 +63,19 @@ Triggers when tests are started. Specifies protocol version.
 }
 ```
 
-1. **event** - name of event.
-2. **version** - `optional` protocol version used for events. If not
+1. **`event`** - name of event.
+2. **`version`** - (optional) protocol version used for events. If not
    provided, latest stable protocol version is expected.
-3. **timestamp** - unix timestamp in milliseconds since epoch. When the
+3. **`timestamp`** - unix timestamp in milliseconds since epoch. When the
    test run started.
-4. **suite** - `optional` name of the test suite.
+4. **`suite`** - (optional) name of the test suite.
 
-### TestSource
+### `TestSource`
 
 When a test source is parsed, this event should be sent with plain text of
-source. Currently only **gherkin** source is supported and it will be
-determined by source extension found in **location**.
+source. It will be determined by source extension found in **`location`**.
+
+Currently only **gherkin** source is supported. 
 
 ``` json
 {
@@ -84,14 +85,16 @@ determined by source extension found in **location**.
 }
 ```
 
-1. **event** - name of event.
-2. **location** - location in source file, based on pattern {path}:{line}.
-3. **source** - is plain text of test source.
+1. **`event`** - name of event.
+2. **`location`** - location in source file, based on pattern `{path}:{line}`.
+3. **`source`** - is plain text of test source.
 
-### StepDefinitionFound
+### `StepDefinitionFound`
 
 Should fire when step regexp or other matching algorithm determines step
-implementation in the source code. Note: there may be ambiguous matches.
+implementation in the source code. 
+
+**Note:** There may be ambiguous matches.
 
 
 ``` json
@@ -106,14 +109,14 @@ implementation in the source code. Note: there may be ambiguous matches.
 }
 ```
 
-1. **event** - name of event.
-2. **location** - location in source file, based on pattern {path}:{line}.
-3. **definition** - reference to step definition in source code.
-4. **arguments** - list of positions for arguments which were matched.
+1. **`event`** - name of event.
+2. **`location`** - location in source file, based on pattern `{path}:{line}`.
+3. **`definition`** - reference to step definition in source code.
+4. **`arguments`** - list of positions for arguments which were matched.
    Positions are determined on **step text** step keyword should be
    omitted when calculating argument positions.
 
-### TestCaseStarted
+### `TestCaseStarted`
 
 Should fire when starting to execute scenario or scenario outline example.
 
@@ -125,12 +128,12 @@ Should fire when starting to execute scenario or scenario outline example.
 }
 ```
 
-1. **event** - name of event.
-2. **location** - location in source file, based on pattern {path}:{line}.
-3. **timestamp** - unix timestamp in milliseconds since epoch. When the
-   test case started.
+1. **`event`** - name of event.
+2. **`location`** - location in source file, based on pattern `{path}:{line}`.
+3. **`timestamp`** - unix timestamp in milliseconds since epoch (when the
+   test case started).
 
-### TestStepStarted
+### `TestStepStarted`
 
 Should fire right before step execution.
 
@@ -142,12 +145,12 @@ Should fire right before step execution.
 }
 ```
 
-1. **event** - name of event.
-2. **location** - location in source file, based on pattern {path}:{line}.
-3. **timestamp** - unix timestamp in milliseconds since epoch. When the
-   test step started.
+1. **`event`** - name of event.
+2. **`location`** - location in source file, based on pattern `{path}:{line}`.
+3. **`timestamp`** - unix timestamp in milliseconds since epoch (when the
+   test step started).
 
-### TestStepFinished
+### `TestStepFinished`
 
 Should fire right after step has finished execution and give appropriate
 status and details.
@@ -163,17 +166,17 @@ status and details.
 }
 ```
 
-1. **event** - name of event.
-2. **location** - location in source file, based on pattern {path}:{line}.
-3. **status** - can be one of **passed, failed, skipped, pending,
-   undefined, ambiguous**.
-4. **timestamp** - unix timestamp in milliseconds since epoch. When the
-   test step finished.
-5. **summary** - `optional` one line summary for step result.
-6. **details** - `optional` multi-line detailed description of step
+1. **`event`** - name of event.
+2. **`location`** - location in source file, based on pattern `{path}:{line}`.
+3. **`status`** - can be one of `passed`, `failed`, `skipped`, `pending`,
+   `undefined`, `ambiguous`.
+4. **`timestamp`** - unix timestamp in milliseconds since epoch (when the
+   test step finished).
+5. **`summary`** - (optional) one line summary for step result.
+6. **`details`** - (optional) multi-line detailed description of step
    result.
 
-### TestCaseFinished
+### `TestCaseFinished`
 
 Should fire after all steps are executed for scenario or outline example.
 Should provide appropriate result status.
@@ -187,16 +190,16 @@ Should provide appropriate result status.
 }
 ```
 
-1. **event** - name of event.
-2. **location** - location in source file, based on pattern {path}:{line}.
-3. **status** - can be one of **passed, failed, skipped, pending,
-   undefined, ambiguous**.
-4. **timestamp** - unix timestamp in milliseconds since epoch. When the
-   test case finished.
+1. **`event`** - name of event.
+2. **`location`** - location in source file, based on pattern `{path}:{line}`.
+3. **`status`** - can be one of `passed`, `failed`, `skipped`, `pending`,
+   `undefined`, `ambiguous`.
+4. **`timestamp`** - unix timestamp in milliseconds since epoch (when the
+   test case finished).
 
-### TestRunFinished
+### `TestRunFinished`
 
-Should fire after all tests are run. Or if stop on failure flag was
+Should fire after all tests are run, **or** if “stop on failure” flag was
 specified and failure occurred. It should carry the status of all tests
 and resource usage summary information.
 
@@ -210,16 +213,16 @@ and resource usage summary information.
 }
 ```
 
-1. **event** - name of event.
-2. **status** - can be one of **passed, failed, skipped, pending,
-   undefined, ambiguous**.
-3. **timestamp** - unix timestamp in milliseconds since epoch. When the
-   test run finished.
-4. **memory** - `optional` memory consumption in bytes used by all tests.
-5. **snippets** - `optional` undefined step implementation source code
+1. **`event`** - name of event.
+2. **`status`** - can be one of `passed`, `failed`, `skipped`, `pending`,
+   `undefined`, `ambiguous`.
+3. **`timestamp`** - unix timestamp in milliseconds since epoch (when the
+   test run finished).
+4. **`memory`** - (optional) memory consumption in bytes used by all tests.
+5. **`snippets`** - (optional) undefined step implementation source code
    snippets.
 
-### TestAttachment
+### `TestAttachment`
 
 An attachment to test cases, for example a screenshot or video. Might be
 exception stack traces.
@@ -235,11 +238,11 @@ exception stack traces.
 }
 ```
 
-1. **event** - name of event.
-2. **location** - location in source file, based on pattern {path}:{line}.
-3. **mime** - mime type of given media file.
-4. **data** - encoded data.
-5. **encoding** - data must be encoded to transfer with json format,
+1. **`event`** - name of event.
+2. **`location`** - location in source file, based on pattern `{path}:{line}`.
+3. **`mime`** - mime type of given media file.
+4. **`data`** - encoded data.
+5. **`encoding`** - data must be encoded to transfer with json format,
    usually base64 or base85.
-6. **timestamp** - unix timestamp in milliseconds since epoch. When the
-   attachment was created.
+6. **`timestamp`** - unix timestamp in milliseconds since epoch (when the
+   attachment was created).
